@@ -145,15 +145,15 @@
       const resultFecth = await fetch('http://localhost:5000/api/users/check',params)
       const tokenResult = await resultFecth.json()
       console.log('tokenResult = ',tokenResult )
-      if (!tokenResult) {
-        window.location.replace("http://localhost:47410/client/login");
+      if (!tokenResult || tokenResult.result === 'error') {
+        window.location.replace("http://localhost:54386/client/login.html");
       }
       const user = parseJwt(tokenResult)
       console.log('user = ', user.roles)
       console.log('user = ', user.roles[0].includes('ADMIN'))
       if (user.roles[0].includes('ADMIN')){
         console.log('herer')
-        window.location.replace("http://localhost:54386/client/warehouse");
+        window.location.replace("http://localhost:54386/client/warehouse.html");
         return
       }
   }

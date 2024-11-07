@@ -18,6 +18,8 @@ module.exports = function (req, res, next) {
     req.user = decoded;
     next();
   } catch (e) {
-    res.status(401).json({ message: APInotifications.auth.notLogged });
+    res
+      .status(401)
+      .json({ result: 'error', message: 'Пользователь не авторизован!' });
   }
 };
