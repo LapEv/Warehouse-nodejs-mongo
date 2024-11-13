@@ -9,8 +9,8 @@ const Users = new Schema({
   shortName: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   phoneNumber: { type: String, unique: true, required: true },
-  positions: { type: String, required: true, ref: 'Positions' },
-  roles: [{ type: String, required: true, ref: 'Roles' }],
+  position: { type: Schema.ObjectId, ref: 'positions' },
+  roles: [{ type: Schema.ObjectId, ref: 'roles' }],
   belongToWarehouse: { type: Boolean, required: true },
   status: { type: String, required: true, default: 'ACTIVE' },
 });

@@ -2,10 +2,19 @@ const Users = require('../../models/users/users');
 const bcrypt = require('bcryptjs');
 const generateAccessToken = require('../../utils/generateAccessToken');
 
+const includes = [
+  {
+    path: 'position',
+    match: { status: 'ACTIVE' },
+    select: 'position',
+  },
+  { path: 'roles', match: { status: 'ACTIVE' }, select: 'role' },
+];
+
 class usersController {
   async getUsers(_, res) {
     try {
-      const users = await Users.find();
+      const users = await Users.find().populate(includes);
       return res.json(users);
     } catch (e) {
       return res.status(400).json({
@@ -17,7 +26,7 @@ class usersController {
 
   async newUser(req, res) {
     try {
-      const { username, password } = req.body;
+      const { username, password, firstName, lastName, middleName } = req.body;
       const check = await Users.findOne({ value: username });
       if (check) {
         return res.status(400).json({
@@ -26,8 +35,15 @@ class usersController {
         });
       }
       const hashPassword = bcrypt.hashSync(password, 7);
-      //     shortName
-      const newUser = new Users({ ...req.body, password: hashPassword });
+      const shortName = `${lastName} ${firstName.slice(
+        0,
+        1
+      )}.${middleName.slice(0, 1)}.`;
+      const newUser = new Users({
+        ...req.body,
+        password: hashPassword,
+        shortName,
+      });
       const { id, roles } = await newUser.save();
       const token = generateAccessToken(id, roles, username);
       return res.json({
