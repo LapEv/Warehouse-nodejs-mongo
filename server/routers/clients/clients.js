@@ -1,11 +1,10 @@
 const Router = require('express');
 const router = new Router();
-const users = require('../../controllers/users/users');
-const authMiddleware = require('../../middleware/authMiddleware');
+const clients = require('../../controllers/clients/clients');
 const roleMiddleware = require('../../middleware/roleMiddleware');
 
 router.get(
-  '/getUsers',
+  '/getClients',
   roleMiddleware([
     'ADMIN',
     'SUPERADMIN',
@@ -13,25 +12,27 @@ router.get(
     'ENGINEER',
     'DISPATCHER',
   ]),
-  users.getUsers
-);
-router.post('/newUser', users.newUser);
-router.post('/login', users.login);
-router.get('/check', authMiddleware, users.check);
-router.post(
-  '/deleteUser',
-  roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  users.deleteUser
+  clients.getClients
 );
 router.post(
-  '/getUserFromArchive',
+  '/newClient',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  users.getUserFromArchive
+  clients.newClient
+);
+router.post(
+  '/deleteClient',
+  roleMiddleware(['ADMIN', 'SUPERADMIN']),
+  clients.deleteClient
+);
+router.post(
+  '/getClientFromArchive',
+  roleMiddleware(['ADMIN', 'SUPERADMIN']),
+  clients.getClientFromArchive
 );
 router.delete(
-  '/fullDeleteUser',
+  '/fullDeleteClient',
   roleMiddleware(['SUPERADMIN']),
-  users.fullDeleteUser
+  clients.fullDeleteClient
 );
 
 module.exports = router;

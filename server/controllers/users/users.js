@@ -26,6 +26,7 @@ class usersController {
         });
       }
       const hashPassword = bcrypt.hashSync(password, 7);
+      //     shortName
       const newUser = new Users({ ...req.body, password: hashPassword });
       const { id, roles } = await newUser.save();
       const token = generateAccessToken(id, roles, username);
@@ -70,13 +71,11 @@ class usersController {
 
   async check(req, res) {
     try {
-      console.log('req.user = ', req.user);
       const token = generateAccessToken(
         req.user.id,
         req.user.roles,
         req.user.username
       );
-      console.log('check token = ', token);
       return res.json(token);
     } catch (e) {
       return res.status(400).json({ message: `${e.message}` });

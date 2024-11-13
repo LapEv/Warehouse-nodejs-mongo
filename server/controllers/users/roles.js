@@ -16,16 +16,14 @@ class rolesController {
   async newRole(req, res) {
     try {
       const { role } = req.body;
-      const checkRole = await Roles.findOne({ value: role });
+      const checkRole = await Roles.findOne({ role });
       if (checkRole) {
         return res.status(400).json({
           result: 'error',
           message: 'Роль с таким названием уже существует!',
         });
       }
-      const newRole = new Roles({
-        value: role,
-      });
+      const newRole = new Roles(req.body);
       const result = await newRole.save();
       return res.json({
         message: 'Роль была успешно добавлена!',

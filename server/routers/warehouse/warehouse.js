@@ -1,23 +1,14 @@
 const Router = require('express');
 const router = new Router();
 const users = require('../../controllers/users/users');
-const authMiddleware = require('../../middleware/authMiddleware');
 const roleMiddleware = require('../../middleware/roleMiddleware');
 
 router.get(
   '/getUsers',
-  roleMiddleware([
-    'ADMIN',
-    'SUPERADMIN',
-    'WAREHOUSE',
-    'ENGINEER',
-    'DISPATCHER',
-  ]),
+  roleMiddleware(['ADMIN', 'SUPERADMIN']),
   users.getUsers
 );
 router.post('/newUser', users.newUser);
-router.post('/login', users.login);
-router.get('/check', authMiddleware, users.check);
 router.post(
   '/deleteUser',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),

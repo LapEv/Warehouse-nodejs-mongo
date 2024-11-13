@@ -1417,18 +1417,32 @@
   <div id="printContent"></div>
 </body>
 <script>
-  window.onload = function () {
-    document.querySelector('.checkAccessPaper').style.display = "block";
-    document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'checkAccess',
-      data: ['Лапкин Е.В.','evglapkin@gmail.com', 'Admin'],
-      type: 'listClassifier'
-    })
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .checkAccess('checkAccess')
+  window.onload = async function () {
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token
+        },
+      };
+      const resultFecth = await fetch('http://localhost:5000/api/users/check',params)
+      const tokenResult = await resultFecth.json()
+      if (!tokenResult || tokenResult.result === 'error') {
+        window.location.replace("http://localhost:54386/client/login.html");
+      }
+      const user = parseJwt(tokenResult)
+      if (user.roles[0].includes('ADMIN') || user.roles[0].includes('WAREHOUSE')) return
+      window.location.replace("http://localhost:54386/client/index.html");
+  }
+
+  function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
   }
 
   const list = {
@@ -1480,21 +1494,6 @@
     type,
     option
   }) {
-    if (func === 'checkAccess') {
-      if (data.includes('Admin') || data.includes('Warehouse')) {
-        list.user = data[0]
-        document.querySelector('.checkAccessPaper').style.display = "none";
-        document.querySelector('.back').style.display = "none";
-        return
-      }
-      const modal = document.querySelector('.modalMessage');
-      modal.innerHTML = svgErr +
-        `<div class='modalMessage_text'><b>Отказано в доступе!</b></div>`;
-      modal.style.display = "flex";
-      setTimeout(() => {
-        window.history.back()
-      }, 3000)
-    }
     if (func === 'newArrivalZIP') {
       const message1 = "ЗИП ";
       const message2 = " для классификатора ";
@@ -2457,6 +2456,7 @@
           inputPopover.focus()
         } else {
           inputPopover.value = e.target.innerText
+          inputPopover.id = e.target.id
           inputPopover.classList.remove('inputPopover')
           popover.remove();
           const label = inputPopover.parentNode.previousElementSibling
@@ -2510,7 +2510,11 @@
       if (e.key === 'Enter') {
         const option = document.querySelectorAll('[role="popover_option"]')[popoverKeyActive < 0 ? 0 :
           popoverKeyActive].innerText
+        const id = document.querySelectorAll('[role="popover_option"]')[popoverKeyActive < 0 ? 0 :
+          popoverKeyActive].id
+        const inputPopover = document.querySelector('.inputPopover')
         inputPopover.value = option
+        inputPopover.id = id
         if (inputPopover.name.includes('nArZ2')) {
           list['listModel'] = list.prepareListModel.filter(value => value[1] === option).map(value =>
             value[0])

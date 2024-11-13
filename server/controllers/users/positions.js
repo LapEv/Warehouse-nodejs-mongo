@@ -16,16 +16,14 @@ class positionsController {
   async newPosition(req, res) {
     try {
       const { position } = req.body;
-      const check = await Positions.findOne({ value: position });
+      const check = await Positions.findOne({ position });
       if (check) {
         return res.status(400).json({
           result: 'error',
           message: 'Должность с таким названием уже существует!',
         });
       }
-      const newPosition = new Positions({
-        value: position,
-      });
+      const newPosition = new Positions(req.body);
       const result = await newPosition.save();
       return res.json({ message: 'Должность была успешно добавлена!', result });
     } catch (e) {

@@ -1,11 +1,10 @@
 const Router = require('express');
 const router = new Router();
-const users = require('../../controllers/users/users');
-const authMiddleware = require('../../middleware/authMiddleware');
+const regions = require('../../controllers/clients/regions');
 const roleMiddleware = require('../../middleware/roleMiddleware');
 
 router.get(
-  '/getUsers',
+  '/getRegions',
   roleMiddleware([
     'ADMIN',
     'SUPERADMIN',
@@ -13,25 +12,27 @@ router.get(
     'ENGINEER',
     'DISPATCHER',
   ]),
-  users.getUsers
-);
-router.post('/newUser', users.newUser);
-router.post('/login', users.login);
-router.get('/check', authMiddleware, users.check);
-router.post(
-  '/deleteUser',
-  roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  users.deleteUser
+  regions.getRegions
 );
 router.post(
-  '/getUserFromArchive',
+  '/newRegion',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  users.getUserFromArchive
+  regions.newRegion
+);
+router.post(
+  '/deleteRegion',
+  roleMiddleware(['ADMIN', 'SUPERADMIN']),
+  regions.deleteRegion
+);
+router.post(
+  '/getRegionFromArchive',
+  roleMiddleware(['ADMIN', 'SUPERADMIN']),
+  regions.getRegionFromArchive
 );
 router.delete(
-  '/fullDeleteUser',
+  '/fullDeleteRegion',
   roleMiddleware(['SUPERADMIN']),
-  users.fullDeleteUser
+  regions.fullDeleteRegion
 );
 
 module.exports = router;

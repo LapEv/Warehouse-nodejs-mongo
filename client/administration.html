@@ -378,6 +378,20 @@
       border: none
     }
 
+    .inputContainerCheckBox{
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      margin-left: 10px;
+      margin-top: -15px;
+    }
+
+    .inputCheckBox{
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
     .btnSubmitContainer {
       display: flex;
       width: 90%;
@@ -451,6 +465,17 @@
       height: 30px;
       margin-right: 10px;
       cursor: pointer
+    }
+
+    .svgCheckedBox {
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+      fill: #1E515D;
+      flex-shrink: 0;
+      font-size: 1.5rem;
+      transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
     }
 
     @media screen and (max-width: 800px) {
@@ -718,7 +743,7 @@
       <div class="closeForm" onclick="cancelContainer('.newEmployeeContainer')">&#x2716;</div>
       <div class="inputsContainer">
         <div class="inputContainer first">
-          <label class="inputLabel" for="nEmp1">Введите Фамилию и инициалы*</label>
+          <label class="inputLabel" for="nEmp1">Введите фамилию*</label>
           <div class="inputOutlinedContainer">
             <input id="nEmp1" name="nEmp1.text" required="true" type="text" class="inputOutlined" value=""
               autocomplete="off">
@@ -726,25 +751,49 @@
           <span class="inputError"></span>
         </div>
         <div class="inputContainer">
-          <label class="inputLabel" for="nEmp2">Введите аккаунт от гугл*</label>
+          <label class="inputLabel" for="nEmp2">Введите имя*</label>
           <div class="inputOutlinedContainer">
-            <input id="nEmp2" name="nEmp2.email" required="true" type="text" class="inputOutlined" value=""
+            <input id="nEmp2" name="nEmp2.text" required="true" type="text" class="inputOutlined" value=""
               autocomplete="off">
           </div>
           <span class="inputError"></span>
         </div>
         <div class="inputContainer">
-          <label class="inputLabel" for="nEmp3">Введите рабочий email*</label>
+          <label class="inputLabel" for="nEmp3">Введите отчество*</label>
           <div class="inputOutlinedContainer">
-            <input id="nEmp3" name="nEmp3.email" required="true" type="text" class="inputOutlined" value=""
+            <input id="nEmp3" name="nEmp3.text" required="true" type="text" class="inputOutlined" value=""
               autocomplete="off">
           </div>
           <span class="inputError"></span>
         </div>
         <div class="inputContainer">
-          <label class="inputLabel" for="nPdm2">Выберите должность*</label>
+          <label class="inputLabel" for="nEmp4">Введите логин*</label>
           <div class="inputOutlinedContainer">
-            <input id="nEmp4" name="nEmp4.text" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nEmp4" name="nEmp4.text" required="true" type="text" class="inputOutlined" value=""
+              autocomplete="off">
+          </div>
+          <span class="inputError"></span>
+        </div>
+        <div class="inputContainer">
+          <label class="inputLabel" for="nEmp5">Введите рабочий email*</label>
+          <div class="inputOutlinedContainer">
+            <input id="nEmp5" name="nEmp5.email" required="true" type="text" class="inputOutlined" value=""
+              autocomplete="off">
+          </div>
+          <span class="inputError"></span>
+        </div>
+        <div class="inputContainer">
+          <label class="inputLabel" for="nEmp6">Введите телефон*</label>
+          <div class="inputOutlinedContainer">
+            <input id="nEmp6" name="nEmp6.email" required="true" type="text" class="inputOutlined" value=""
+              autocomplete="off">
+          </div>
+          <span class="inputError"></span>
+        </div>
+        <div class="inputContainer">
+          <label class="inputLabel" for="nEmp7">Выберите должность*</label>
+          <div class="inputOutlinedContainer">
+            <input id="nEmp7" name="nEmp7.text" required="true" type="text" class="inputOutlined dropdown" value=""
               autocomplete="off" oninput="changeInputDropDown(this, 'listPost')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listPost')"
               onclick="changeInputClickDropDown(this, 'listPost', event.key)" onchange="changeInputDropDownCross(this)">
@@ -752,14 +801,19 @@
           <span class="inputError"></span>
         </div>
         <div class="inputContainer">
-          <label class="inputLabel" for="nPdm2">Выберите уроень доступа*</label>
+          <label class="inputLabel" for="nEmp8">Выберите уроень доступа*</label>
           <div class="inputOutlinedContainer">
-            <input id="nEmp5" name="nEmp5.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nEmp8" name="nEmp8.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
               autocomplete="off" oninput="changeInputDropDown(this, 'listRole')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listRole')"
               onclick="changeInputClickDropDown(this, 'listRole', event.key)" onchange="changeInputDropDownCross(this)">
           </div>
           <span class="inputError"></span>
+        </div>
+        <div class="inputContainer inputContainerCheckBox">
+          <input id="nEmp9" name="nEmp9.checkbox" value="off" type="checkbox" class="inputCheckBox" onclick="checkedBox(this)">
+          <svg class="svgCheckedBox" viewBox="0 0 24 24" fill="#C1EEE1" onclick="checkedBox(this)"><path id="pathsvgCheckedBox" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></svg>
+          <span style="margin-left: 10px;">Принадлежность к складу</span>
         </div>
         <span class="inputsWarning"></span>
         <div class="btnSubmitContainer">
@@ -821,7 +875,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nCli2">Введите наименование клиента*</label>
           <div class="inputOutlinedContainer">
-            <input id="nCli2" name="nCli.text" required="true" type="text" class="inputOutlined" value=""
+            <input id="nCli2" name="nCli.textRuEng" required="true" type="text" class="inputOutlined" value=""
               autocomplete="off">
           </div>
           <span class="inputError"></span>
@@ -926,18 +980,32 @@
   </div>
 </body>
 <script>
-  window.onload = function () {
-    document.querySelector('.checkAccessPaper').style.display = "block";
-    document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'checkAccess',
-      data: ['evglapkin@gmail.com', 'Admin'],
-      type: 'listClassifier'
-    })
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .checkAccess('checkAccess')
+  window.onload = async function () {
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token
+        },
+      };
+      const resultFecth = await fetch('http://localhost:5000/api/users/check',params)
+      const tokenResult = await resultFecth.json()
+      if (!tokenResult || tokenResult.result === 'error') {
+        window.location.replace("http://localhost:54386/client/login.html");
+      }
+      const user = parseJwt(tokenResult)
+      if (user.roles[0].includes('ADMIN')) return
+      window.location.replace("http://localhost:54386/client/index.html");
+  }
+
+  function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
   }
 
   const list = {
@@ -971,20 +1039,13 @@
     data,
     type
   }) {
-    if (func === 'checkAccess') {
-      if (!data.includes('Admin')) {
-        list.user = data[0]
-        const modal = document.querySelector('.modalMessage');
-        modal.innerHTML = svgErr +
-          `<div class='modalMessage_text'><b>Отказано в доступе!</b></div>`;
-        modal.style.display = "flex";
-        setTimeout(() => {
-          window.history.back()
-        }, 3000)
-        return
-      }
-      document.querySelector('.checkAccessPaper').style.display = "none";
-      document.querySelector('.back').style.display = "none";
+    if (result === 'error') {
+      const modal = document.querySelector('.modalMessage');
+      modal.innerHTML = svgErr +
+        `<div class='modalMessage_text'><b>${data}</b></div><button id='buttonModalMessage' onClick='closeModalMessage("${func}", "${type}")'>OK</button>`;
+      modal.style.display = "flex";
+      document.getElementById('buttonModalMessage').focus();
+      return
     }
     if (func === 'newСlassifier') {
       const message1 = "Классификатор ";
@@ -1032,7 +1093,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newPost') {
+    if (func === '.newPostContainer') {
       const message1 = "Должность ";
       const modal = document.querySelector('.modalMessage');
       modal.innerHTML = svgOk +
@@ -1040,7 +1101,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newRole') {
+    if (func === '.newRoleContainer') {
       const message1 = "Роль ";
       const modal = document.querySelector('.modalMessage');
       modal.innerHTML = svgOk +
@@ -1048,7 +1109,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newClient') {
+    if (func === '.newClientContainer') {
       const message1 = "Клиент ";
       const message2 = " с наименованием ";
       const modal = document.querySelector('.modalMessage');
@@ -1057,7 +1118,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newObject') {
+    if (func === '.newObjectContainer') {
       const message1 = "Объект ";
       const message2 = " для клиента ";
       const message3 = " с адресом ";
@@ -1068,7 +1129,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newRegion') {
+    if (func === '.newRegionContainer') {
       const message1 = "Регион ";
       const modal = document.querySelector('.modalMessage');
       modal.innerHTML = svgOk +
@@ -1111,14 +1172,22 @@
         list.fullLoad = 0
         list.count = 0
       }
+      list.listClient.map(item => {item, item.data = item.name})
+      list.listRegion.map(item => {item, item.data = item.region})
+      console.log('list = ', list)
+
     }
   }
 
-  function closeModalMessage(container) {
+  function closeModalMessage(container, type) {
     document.querySelector('.modalMessage').style.display = "none";
     document.querySelector('.back').style.display = "none";
     document.querySelector('.back').style.zIndex = 13;
     document.querySelector(container).style.display = "none";
+    if (type === false) {
+      localStorage.setItem('token', '')
+      window.location.replace("http://localhost:54386/client/login.html");
+    }
   }
 
   function newСlassifier() {
@@ -1254,29 +1323,12 @@
     document.querySelector('.newClientContainer').style.display = "flex";
   }
 
-  function newObject() {
+  async function newObject() {
     zeroingList()
     document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewObject',
-      data: ['Перекресток', 'Азбука вкуса', 'Лента', 'Мираторг'],
-      type: 'listClient'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewObject',
-      data: ['Москва', 'Московская область', 'Санкт-Петербург', 'Ленинградская область'],
-      type: 'listRegion'
-    })
     list.fullLoad = 2
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getClients('getDataListForNewObject','listClient')
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getRegions('getDataListForNewObject','listRegion')
-
+    await GetData('clients/getClients', 'getDataListForNewObject', 'listClient')
+    await GetData('regions/getRegions', 'getDataListForNewObject', 'listRegion')
   }
 
   function newRegion() {
@@ -1298,6 +1350,7 @@
       if (popover.contains(e.target) && e.srcElement.tagName === 'LI') {
         const inputPopover = document.querySelector('.inputPopover')
         inputPopover.value = e.target.innerText
+        inputPopover.id = e.target.id
         if (inputPopover.name.includes('nZIP2')) {
           list['listModel'] = list.prepareListModel.filter(value => value[1] === e.target.innerText).map(value =>
             value[0])
@@ -1330,7 +1383,7 @@
         e.preventDefault()
           return
         }
-        if (e.key === 'ArrowDown') {
+      if (e.key === 'ArrowDown') {
         if (popoverKeyActive < 0) {
           document.querySelectorAll('[role="popover_option"]:first-of-type')[0].classList.add('popoverKeyActive')
         }
@@ -1353,8 +1406,11 @@
       if (e.key === 'Enter') {
         const option = document.querySelectorAll('[role="popover_option"]')[popoverKeyActive < 0 ? 0 :
           popoverKeyActive].innerText
+        const id = document.querySelectorAll('[role="popover_option"]')[popoverKeyActive < 0 ? 0 :
+          popoverKeyActive].id
         const inputPopover = document.querySelector('.inputPopover')
         inputPopover.value = option
+        inputPopover.id = id
         if (inputPopover.name.includes('nZIP2')) {
           list['listModel'] = list.prepareListModel.filter(value => value[1] === option).map(value =>
             value[0])
@@ -1497,8 +1553,8 @@
           index) => {
           const popoverLi = document.createElement("li");
           popoverLi.role = "popover_option"
-          popoverLi.id = `popover_option_${index}`
-          popoverLi.innerText = value
+          popoverLi.id = value._id
+          popoverLi.innerText = value.data
           if (value === input.value) {
             popoverLi.className = 'popoverKeySelected'
           }
@@ -1534,11 +1590,12 @@
   function handleNewContainer(container) {
     const formInputs = document.querySelectorAll(`${container} input`)
     const data = Array.from(formInputs).map(item => item.value)
+    const dataID = Array.from(formInputs).map(item => item.id)
     const errors = document.querySelectorAll(`${container} .inputError`)
     const dataErr = Array.from(errors).map(item => item.innerText).filter(value => value)
     const checkEmptyValue = Array.from(formInputs).map(item => !item.value && item.required).filter(item => item)
+    const inputsWarning = document.querySelector(`${container} .inputsWarning`)
     if (dataErr.length > 0 || checkEmptyValue.length > 0) {
-      const inputsWarning = document.querySelector(`${container} .inputsWarning`)
       inputsWarning.textContent = 'Заполните необходимые поля и без ошибок!'
       return
     }
@@ -1601,61 +1658,84 @@
       //   .writeNewPodmena(data)
     }
     if (container.includes('newPostContainer')) {
-      data.push('Активный')
-      onSuccess({
-        result: 'success',
-        func: 'newPost',
-        data
-      })
-      // google.script.run
-      //   .withSuccessHandler(onSuccess)
-      //   .writeNewPost(data)
+      const newData = {position: data[0], status: 'ACTIVE'}
+      SendDataPost(newData, 'positions/newPosition', data, container)
     }
     if (container.includes('newRoleContainer')) {
-      data.push('Активный')
-      onSuccess({
-        result: 'success',
-        func: 'newRole',
-        data
-      })
-      // google.script.run
-      //   .withSuccessHandler(onSuccess)
-      //   .writeNewRole(data)
+      const newData = {role: data[0], status: 'ACTIVE'}
+      SendDataPost(newData, 'roles/newRole', data, container)
     }
     if (container.includes('newClientContainer')) {
-      data.push('Активный')
-      onSuccess({
-        result: 'success',
-        func: 'newClient',
-        data
-      })
-      // google.script.run
-      //   .withSuccessHandler(onSuccess)
-      //   .writeNewClient(data)
+      const newData = {legalName: data[0], name: data[1], status: 'ACTIVE'}
+      SendDataPost(newData, 'clients/newClient', data, container)
     }
     if (container.includes('newObjectContainer')) {
-      data.push('Активный')
-      onSuccess({
-        result: 'success',
-        func: 'newObject',
-        data
-      })
-      // google.script.run
-      //   .withSuccessHandler(onSuccess)
-      //   .writeNewObject(data)
+      const newData = {object: data[0], client: dataID[1], address: data[2], region: dataID[3], coordinates: data[4], clientName: data[5], clientID: data[6], status: 'ACTIVE'}
+      SendDataPost(newData, 'objects/newObject', data, container)
     }
     if (container.includes('newRegionContainer')) {
-      data.push('Активный')
-      onSuccess({
-        result: 'success',
-        func: 'newRegion',
-        data
-      })
-      // google.script.run
-      //   .withSuccessHandler(onSuccess)
-      //   .writeNewObject(data)
+      const newData = {region: data[0], status: 'ACTIVE'}
+      SendDataPost(newData, 'regions/newRegion', data, container)
     }
   }
+
+  async function SendDataPost(sendData, urlData, data, container){
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token,
+        },
+        body: JSON.stringify(sendData),
+        
+      };
+      const resultFecth = await fetch(`http://localhost:5000/api/${urlData}`,params)
+      const result = await resultFecth.json()
+      if (typeof result === 'object' && result.result === 'error'){
+        onSuccess({
+          result: 'error',
+          func: container,
+          type: result.status === 'NotLogged' ?? false,
+          data: result.message
+        })
+        return
+      }
+      onSuccess({
+        result: 'success',
+        func: container,
+        data
+      })
+  }
+
+  async function GetData(urlData, func, type){
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token,
+        },
+      };
+      const resultFecth = await fetch(`http://localhost:5000/api/${urlData}`,params)
+      const result = await resultFecth.json()
+      if (typeof result === 'object' && result.result === 'error'){
+        onSuccess({
+          result: 'error',
+          func: container,
+          type: result.status === 'NotLogged' ?? false,
+          data: result.message
+        })
+        return
+      }
+      onSuccess({
+        result: 'success',
+        func,
+        type,
+        data: result
+      })
+  }
+
 
   function textValidation(value) {
     if (value === '') return {
@@ -1767,6 +1847,18 @@
     }
   }
 
+  function checkedBox(input){
+    const newPath = document.getElementById("pathsvgCheckedBox");
+    const checked = 'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
+    const noChecked = 'M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'
+    if (input.value === 'off') {
+      newPath.setAttribute('d', checked)
+      input.value = 'on'
+      return
+    }
+    newPath.setAttribute('d', noChecked) 
+    input.value = 'off'
+  }
 
   const svgErr =
     "<svg class='modalSVGErr' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 455.111 455.111' style='enable-background:new 0 0 455.111 455.111;' xml:space='preserve'><circle style='fill:#E24C4B;' cx='227.556' cy='227.556' r='227.556'/><path style='fill:#D1403F;' d='M455.111,227.556c0,125.156-102.4,227.556-227.556,227.556c-72.533,0-136.533-32.711-177.778-85.333c38.4,31.289,88.178,49.778,142.222,49.778c125.156,0,227.556-102.4,227.556-227.556c0-54.044-18.489-103.822-49.778-142.222C422.4,91.022,455.111,155.022,455.111,227.556z'/><path style='fill:#FFFFFF;' d='M331.378,331.378c-8.533,8.533-22.756,8.533-31.289,0l-72.533-72.533l-72.533,72.533c-8.533,8.533-22.756,8.533-31.289,0c-8.533-8.533-8.533-22.756,0-31.289l72.533-72.533l-72.533-72.533c-8.533-8.533-8.533-22.756,0-31.289c8.533-8.533,22.756-8.533,31.289,0l72.533,72.533l72.533-72.533c8.533-8.533,22.756-8.533,31.289,0c8.533,8.533,8.533,22.756,0,31.289l-72.533,72.533l72.533,72.533C339.911,308.622,339.911,322.844,331.378,331.378z'/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>";
@@ -1774,6 +1866,9 @@
     "<svg class='modalSVGOK' version='1.0' xmlns='http://www.w3.org/2000/svg'  width='1222.000000pt' height='1280.000000pt' viewBox='0 0 1222.000000 1280.000000' preserveAspectRatio='xMidYMid meet'><metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata><g transform='translate(0.000000,1280.000000) scale(0.100000,-0.100000)'fill='#4caf50' stroke='none'><path d='M7271 12780 c-79 -21 -133 -55 -155 -98 -8 -16 -18 -93 -25 -187 -80 -1109 -253 -1873 -531 -2343 -141 -238 -279 -387 -585 -630 -340 -271 -528 -471 -629 -670 -15 -30 -72 -165 -128 -300 -300 -738 -565 -1282 -836 -1719 -265 -425 -548 -739 -783 -867 -116 -63 -180 -76 -365 -76 l-164 0 0 -2625 c0 -1444 2 -2625 5 -2625 3 0 62 -11 132 -24 71 -14 251 -48 400 -75 150 -28 393 -73 540 -101 1744 -324 1588 -298 1917 -325 485 -39 1028 -73 1566 -97 369 -16 1398 -16 1650 0 515 34 826 90 1010 182 324 163 742 555 873 818 l42 85 6 336 c4 246 9 345 19 371 29 76 94 154 305 366 236 236 306 319 360 429 80 163 68 256 -85 635 -101 252 -140 380 -140 464 0 103 64 208 270 441 229 260 292 369 276 481 -10 75 -62 184 -179 376 -202 333 -256 458 -243 557 10 73 56 154 182 321 223 295 252 353 240 486 -19 213 -189 556 -409 829 -83 103 -245 260 -322 311 -169 114 -421 159 -1110 195 -242 13 -1334 18 -2050 9 l-410 -5 -24 70 c-48 138 -29 362 53 622 81 256 179 480 450 1021 107 215 214 434 236 488 85 205 148 438 187 698 22 140 25 637 5 761 -73 454 -193 740 -413 978 -296 321 -816 521 -1138 437z'/> <path d='M386 6129 c-123 -29 -263 -139 -324 -255 -66 -127 -62 65 -62 -2674 0 -2181 2 -2493 15 -2549 43 -182 187 -329 370 -377 64 -17 1712 -20 1785 -3 181 42 346 215 380 398 14 74 14 4988 0 5062 -34 183 -199 356 -380 398 -57 13 -1728 13 -1784 0z'/> </g> </svg>";
   const svgCrossDropdown =
     '<svg class="svgDropdownCross" width="800px" height="800px" viewBox="0 0 24 24" fill="#C1EEE1" onclick="clearInput(this)"><path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z"></path></svg>'
+  const svgCheckedBox =
+    '<svg class="svgCheckedBox" width="800px" height="800px" viewBox="0 0 24 24" fill="#C1EEE1"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></svg>'
+
 </script>
 
 </html>
