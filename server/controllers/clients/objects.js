@@ -1,4 +1,4 @@
-const Objects = require('../../models/Clients/objects');
+const Objects = require('../../models/clients/objects');
 
 const includes = [
   {

@@ -1,4 +1,4 @@
-const Clients = require('../../models/Clients/clients');
+const Clients = require('../../models/clients/clients');
 
 class clientsController {
   async getClients(_, res) {

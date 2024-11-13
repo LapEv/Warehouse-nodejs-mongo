@@ -1,4 +1,4 @@
-const Regions = require('../../models/Clients/regions');
+const Regions = require('../../models/clients/regions');
 
 class clientsController {
   async getRegions(_, res) {
