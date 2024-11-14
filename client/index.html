@@ -134,7 +134,6 @@
 <script>
   window.onload = async function () {
     const token = localStorage.getItem('token')
-    console.log('token = ', token)
     const params = {
         method: "GET",
         headers: {
@@ -144,15 +143,17 @@
       };
       const resultFecth = await fetch('http://localhost:5000/api/users/check',params)
       const tokenResult = await resultFecth.json()
-      console.log('tokenResult = ',tokenResult )
       if (!tokenResult || tokenResult.result === 'error') {
         window.location.replace("http://localhost:54386/client/login.html");
       }
       const user = parseJwt(tokenResult)
-      console.log('user = ', user.roles)
-      console.log('user = ', user.roles[0].includes('ADMIN'))
-      if (user.roles[0].includes('ADMIN')){
-        console.log('index')
+      const admin = user.roles.find(({role}) => role.includes('ADMIN')) ?? false
+      const warehouse = user.roles.find(({role}) => role.includes('WAREHOUSE')) ?? false
+      if (admin){
+        window.location.replace("http://localhost:54386/client/administration.html");
+        return
+      }
+      if (warehouse){
         window.location.replace("http://localhost:54386/client/warehouse.html");
         return
       }

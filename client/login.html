@@ -501,13 +501,19 @@
         localStorage.setItem('token', '')
         return
       }
-      localStorage.setItem('token', result)
       const user = parseJwt(result)
-      if (user.roles[0].includes('ADMIN')){
+      const admin = user.roles.find(({role}) => role.includes('ADMIN')) ?? false
+      const warehouse = user.roles.find(({role}) => role.includes('WAREHOUSE')) ?? false
+      if (admin){
+        localStorage.setItem('token', result)
+        window.location.replace("http://localhost:54386/client/administration.html");
+        return
+      }
+      if (warehouse){
+        localStorage.setItem('token', result)
         window.location.replace("http://localhost:54386/client/warehouse.html");
         return
       }
-
       form.reset()
     }
   }

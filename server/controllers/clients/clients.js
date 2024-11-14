@@ -79,7 +79,7 @@ class clientsController {
     try {
       const result = await Clients.findOneAndDelete(req.body);
       return res.json({
-        message: 'Клиент была успешно удален!',
+        message: 'Клиент был успешно удален!',
         result,
       });
     } catch (e) {

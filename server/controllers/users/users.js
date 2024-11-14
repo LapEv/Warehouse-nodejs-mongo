@@ -61,7 +61,7 @@ class usersController {
   async login(req, res) {
     try {
       const { username, password } = req.body;
-      const user = await Users.findOne({ username });
+      const user = await Users.findOne({ username }).populate(includes);
       if (!user) {
         return res.status(400).json({
           result: 'error',
@@ -81,7 +81,7 @@ class usersController {
       console.log(e);
       return res
         .status(400)
-        .json({ message: `${APInotifications.auth.loginError}: ${e.message}` });
+        .json({ message: `Ошибка при входе в систему: ${e.message}` });
     }
   }
 

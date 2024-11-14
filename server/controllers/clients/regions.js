@@ -79,7 +79,7 @@ class clientsController {
     try {
       const result = await Regions.findOneAndDelete(req.body);
       return res.json({
-        message: 'Регион была успешно удален!',
+        message: 'Регион был успешно удален!',
         result,
       });
     } catch (e) {

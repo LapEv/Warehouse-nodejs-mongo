@@ -16,9 +16,7 @@ class classifierController {
   async newClassifier(req, res) {
     try {
       const { classifier } = req.body;
-      console.log('classifier = ', classifier);
       const checkClassifier = await Classifier.findOne({ classifier });
-      console.log('checkClassifier = ', checkClassifier);
       if (checkClassifier) {
         return res.status(400).json({
           result: 'error',
@@ -26,9 +24,7 @@ class classifierController {
         });
       }
       const newClassifier = new Classifier(req.body);
-      console.log('newClassifier = ', newClassifier);
       const result = await newClassifier.save();
-      console.log('result = ', result);
       return res.json({
         message: 'Классификатор был успешно добавлен!',
         result,
@@ -83,7 +79,7 @@ class classifierController {
     try {
       const result = await Classifier.findOneAndDelete(req.body);
       return res.json({
-        message: 'Классификатор была успешно удален!',
+        message: 'Классификатор был успешно удален!',
         result,
       });
     } catch (e) {

@@ -711,7 +711,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nZIP3">Выберите модель*</label>
           <div class="inputOutlinedContainer">
-            <input id="nZIP3" name="nZIP3.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nZIP3" name="nZIP3.textRuEng" required="true" type="text" class="inputOutlined dropdown nZIP3" value=""
               autocomplete="off" oninput="changeInputDropDown(this, 'listModel')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listModel')"
               onclick="changeInputClickDropDown(this, 'listModel')" onchange="changeInputDropDownCross(this)">
@@ -732,7 +732,7 @@
         <div class="inputContainer first">
           <label class="inputLabel" for="nPdm1">Введите наименование подмены*</label>
           <div class="inputOutlinedContainer">
-            <input id="nPdm1" name="nPdm1.text" required="true" type="text" class="inputOutlined" value=""
+            <input id="nPdm1" name="nPdm1.textRuEng" required="true" type="text" class="inputOutlined" value=""
               autocomplete="off">
           </div>
           <span class="inputError"></span>
@@ -1028,7 +1028,8 @@
         window.location.replace("http://localhost:54386/client/login.html");
       }
       const user = parseJwt(tokenResult)
-      if (user.roles[0].includes('ADMIN')) return
+      const admin = user.roles.find(({role}) => role.includes('ADMIN'))
+      if (admin) return
       window.location.replace("http://localhost:54386/client/index.html");
   }
 
@@ -1088,7 +1089,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newModel') {
+    if (func === '.newModelContainer') {
       const message1 = "Модель ";
       const message2 = " с классификатором ";
       const modal = document.querySelector('.modalMessage');
@@ -1097,7 +1098,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newZIP') {
+    if (func === '.newZIPContainer') {
       const message1 = "Запчасть ";
       const message2 = " в классификатор ";
       const message3 = " и модель ";
@@ -1107,7 +1108,7 @@
       modal.style.display = "flex";
       document.getElementById('buttonModalMessage').focus();
     }
-    if (func === 'newPodmena') {
+    if (func === '.newPodmenaContainer') {
       const message1 = "Подмена ";
       const message2 = " в классификатор ";
       const modal = document.querySelector('.modalMessage');
@@ -1173,6 +1174,7 @@
     if (func === 'getDataListForNewModel') {
       list[type] = data
       document.querySelector('.newModelContainer').style.display = "flex";
+      list.listClassifier.map(item => {item, item.data = item.classifier})
     }
     if (func === 'getDataListForNewZIP') {
       list[type] = data
@@ -1182,10 +1184,13 @@
         list.fullLoad = 0
         list.count = 0
       }
+      list.listClassifier.map(item => {item, item.data = item.classifier})
+      list.prepareListModel.map(item => {item, item.data = item.model})
     }
     if (func === 'getDataListForNewPodmena') {
       list[type] = data
       document.querySelector('.newPodmenaContainer').style.display = "flex";
+      list.listClassifier.map(item => {item, item.data = item.classifier})
     }
     if (func === 'getDataListForNewEmployee') {
       list[type] = data
@@ -1227,93 +1232,24 @@
     document.querySelector('.newСlassifierContainer').style.display = "flex";
   }
 
-  function newModel() {
+  async function newModel() {
     zeroingList()
     document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewModel',
-      data: ['Ремонт', 'Профилактика', 'Плановые работы', 'Массовые работы'],
-      type: 'listClassifier'
-    })
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getСlassifier('getDataListForNewModel','listClassifier')
+    await GetData('classifier/getClassifier', 'getDataListForNewModel', 'listClassifier')
   }
 
-  function newZIP() {
+  async function newZIP() {
     zeroingList()
     document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewZIP',
-      data: ['Весы',
-        'ФР',
-        'ФН',
-        'ИБП',
-        'Кассовое оборудование',
-        'Прочее',
-        'Сетевое оборудование',
-        'Оргтехника',
-        'Прайсчекеры',
-        'Термопринтеры'
-      ],
-      type: 'listClassifier'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewZIP',
-      data: [
-        ['Digi SM-100', 'Весы'],
-        ['Digi SM-300', 'Весы'],
-        ['Digi SM-500', 'Весы'],
-        ['Атол-77Ф', 'ФР'],
-        ['Retail 01Ф', 'ФР'],
-        ['DataPrint', 'Весы'],
-        ['Noname', 'ИБП'],
-        ['Dosmar', 'Кассовое оборудование'],
-        ['A-data', 'Прочее'],
-        ['Noname', 'Прочее'],
-        ['Noname', 'ФН'],
-        ['СП-802', 'ФР'],
-        ['Netac', 'Прочее'],
-        ['AMD', 'Прочее'],
-        ['ChWay', 'Кассовое оборудование'],
-        ['ФН-1.2_Х5', 'ФН']
-      ],
-      type: 'prepareListModel'
-    })
     list.fullLoad = 2
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getСlassifier('getDataListForNewZIP', 'listClassifier')
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getModel('getDataListForNewZIP','prepareListModel')
+    await GetData('classifier/getClassifier', 'getDataListForNewZIP', 'listClassifier')
+    await GetData('models/getModels', 'getDataListForNewZIP', 'prepareListModel')
   }
 
-  function newPodmena() {
+  async function newPodmena() {
     zeroingList()
     document.querySelector('.back').style.display = "block";
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewPodmena',
-      data: ['Весы',
-        'ФР',
-        'ФН',
-        'ИБП',
-        'Кассовое оборудование',
-        'Прочее',
-        'Сетевое оборудование',
-        'Оргтехника',
-        'Прайсчекеры',
-        'Термопринтеры'
-      ],
-      type: 'listClassifier'
-    })
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getСlassifier('getDataListForNewPodmena', 'listClassifier')
+    await GetData('classifier/getClassifier', 'getDataListForNewPodmena', 'listClassifier')
   }
 
   async function newEmployee() {
@@ -1368,9 +1304,8 @@
         inputPopover.value = e.target.innerText
         inputPopover.id = e.target.id
         if (inputPopover.name.includes('nZIP2')) {
-          list['listModel'] = list.prepareListModel.filter(value => value[1] === e.target.innerText).map(value =>
-            value[0])
-          document.getElementById('nZIP3').value = ''
+          list['listModel'] = list.prepareListModel.filter(value => value.classifier._id === e.target.id)
+          document.querySelector('.nZIP3').value = ''
         }
         inputPopover.classList.remove('inputPopover')
         popover.remove();
@@ -1428,9 +1363,8 @@
         inputPopover.value = option
         inputPopover.id = id
         if (inputPopover.name.includes('nZIP2')) {
-          list['listModel'] = list.prepareListModel.filter(value => value[1] === option).map(value =>
-            value[0])
-          document.getElementById('nZIP3').value = ''
+          list['listModel'] = list.prepareListModel.filter(value => value.classifier._id === e.target.id)
+          document.querySelector('.nZIP3').value = ''
         }
         inputPopover.classList.remove('inputPopover')
         const popover = document.querySelector('.popover')
@@ -1638,37 +1572,16 @@
       SendDataPost(newData, 'classifier/newClassifier', data, container)
     }
     if (container.includes('newModelContainer')) {
-      data.push('Активный')
-      // onSuccess({
-      //   result: 'success',
-      //   func: 'newModel',
-      //   data
-      // })
-      google.script.run
-        .withSuccessHandler(onSuccess)
-        .writeNewModel(data)
+      const newData = {model: data[0], classifier: dataID[1], status: 'ACTIVE'}
+      SendDataPost(newData, 'models/newModel', data, container)
     }
     if (container.includes('newZIPContainer')) {
-      data.push('Активный')
-      // onSuccess({
-      //   result: 'success',
-      //   func: 'newZIP',
-      //   data
-      // })
-      google.script.run
-        .withSuccessHandler(onSuccess)
-        .writeNewZIP(data)
+      const newData = {classifierZIP: data[0], classifier: dataID[1], model: dataID[2], status: 'ACTIVE'}
+      SendDataPost(newData, 'classifierZIP/newClassifierZIP', data, container)
     }
     if (container.includes('newPodmenaContainer')) {
-      data.push('Активный')
-      // onSuccess({
-      //   result: 'success',
-      //   func: 'newPodmena',
-      //   data
-      // })
-      google.script.run
-        .withSuccessHandler(onSuccess)
-        .writeNewPodmena(data)
+      const newData = {classifierPodmena: data[0], classifier: dataID[1], status: 'ACTIVE'}
+      SendDataPost(newData, 'classifierPodmena/newClassifierPodmena', data, container)
     }
     if (container.includes('newEmployeeContainer')) {
       const newData = {
@@ -1792,7 +1705,7 @@
       status: true,
       error: 'Поле не может быть пустым!'
     }
-    if (!value.match('^[-_?!, .а-яА-ЯёЁ0-9a-zA-Zs]+$')) {
+    if (!value.match('^[-_?+!, .а-яА-ЯёЁ0-9a-zA-Zs]+$')) {
       return {
         status: true,
         error: 'Только кирилица и английский, цифры, точка, пробел, тире!'
