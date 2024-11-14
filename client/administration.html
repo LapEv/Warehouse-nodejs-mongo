@@ -1028,8 +1028,7 @@
         window.location.replace("http://localhost:54386/client/login.html");
       }
       const user = parseJwt(tokenResult)
-      const admin = user.roles.find(({role}) => role.includes('ADMIN'))
-      if (admin) return
+      if (user.roles.includes('ADMIN')) return
       window.location.replace("http://localhost:54386/client/index.html");
   }
 

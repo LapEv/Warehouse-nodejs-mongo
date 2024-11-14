@@ -502,14 +502,12 @@
         return
       }
       const user = parseJwt(result)
-      const admin = user.roles.find(({role}) => role.includes('ADMIN')) ?? false
-      const warehouse = user.roles.find(({role}) => role.includes('WAREHOUSE')) ?? false
-      if (admin){
+      if (user.roles.includes('ADMIN')){
         localStorage.setItem('token', result)
         window.location.replace("http://localhost:54386/client/administration.html");
         return
       }
-      if (warehouse){
+      if (user.roles.includes('WAREHOUSE')){
         localStorage.setItem('token', result)
         window.location.replace("http://localhost:54386/client/warehouse.html");
         return

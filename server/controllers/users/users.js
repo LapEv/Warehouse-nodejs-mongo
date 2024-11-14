@@ -44,8 +44,10 @@ class usersController {
         password: hashPassword,
         shortName,
       });
-      const { id, roles } = await newUser.save();
-      const token = generateAccessToken(id, roles, username);
+      const user = await newUser.save();
+      const userFull = await user.populate(includes);
+      const roles = userFull.roles.map(({ role }) => role);
+      const token = generateAccessToken(user._id, roles, user.username);
       return res.json({
         message: 'Пользователь был успешно добавлен!',
         token,
@@ -75,7 +77,8 @@ class usersController {
           message: 'Неверный пароль!',
         });
       }
-      const token = generateAccessToken(user._id, user.roles, user.username);
+      const roles = user.roles.map(({ role }) => role);
+      const token = generateAccessToken(user._id, roles, user.username);
       return res.json(token);
     } catch (e) {
       console.log(e);
