@@ -10,8 +10,18 @@ class warehouseController {
       const clients = await Clients.find();
       const warehousesUsers = users
         .filter((item) => (item.belongToWarehouse ? item : false))
-        .map((item) => item.shortName);
-      const warehousesClients = clients.map((item) => item.name);
+        .map(({ shortName, _id }) => {
+          return {
+            warehouse: shortName,
+            _id: _id,
+          };
+        });
+      const warehousesClients = clients.map(({ name, _id }) => {
+        return {
+          warehouse: name,
+          _id: _id,
+        };
+      });
       const warehouses = [...warehousesUsers, ...warehousesClients].sort();
       return res.json(warehouses);
     } catch (e) {
