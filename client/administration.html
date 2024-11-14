@@ -1575,12 +1575,12 @@
       SendDataPost(newData, 'models/newModel', data, container)
     }
     if (container.includes('newZIPContainer')) {
-      const newData = {classifierZIP: data[0], classifier: dataID[1], model: dataID[2], status: 'ACTIVE'}
-      SendDataPost(newData, 'classifierZIP/newClassifierZIP', data, container)
+      const newData = {zip: data[0], classifier: dataID[1], model: dataID[2], status: 'ACTIVE'}
+      SendDataPost(newData, 'zip/newZIP', data, container)
     }
     if (container.includes('newPodmenaContainer')) {
-      const newData = {classifierPodmena: data[0], classifier: dataID[1], status: 'ACTIVE'}
-      SendDataPost(newData, 'classifierPodmena/newClassifierPodmena', data, container)
+      const newData = {podmena: data[0], classifier: dataID[1], status: 'ACTIVE'}
+      SendDataPost(newData, 'podmena/newPodmena', data, container)
     }
     if (container.includes('newEmployeeContainer')) {
       const newData = {
@@ -1704,7 +1704,7 @@
       status: true,
       error: 'Поле не может быть пустым!'
     }
-    if (!value.match('^[-_?+!, .а-яА-ЯёЁ0-9a-zA-Zs]+$')) {
+    if (!value.match('^[-_?()+!, .а-яА-ЯёЁ0-9a-zA-Zs]+$')) {
       return {
         status: true,
         error: 'Только кирилица и английский, цифры, точка, пробел, тире!'

@@ -1,10 +1,10 @@
 const Router = require('express');
 const router = new Router();
-const classifierPodmena = require('../../controllers/warehouse/classifierPodmena');
+const podmena = require('../../controllers/warehouse/Podmena');
 const roleMiddleware = require('../../middleware/roleMiddleware');
 
 router.get(
-  '/getClassifierPodmena',
+  '/getPodmena',
   roleMiddleware([
     'ADMIN',
     'SUPERADMIN',
@@ -12,27 +12,27 @@ router.get(
     'ENGINEER',
     'DISPATCHER',
   ]),
-  classifierPodmena.getClassifierPodmena
+  podmena.getPodmena
 );
 router.post(
-  '/newClassifierPodmena',
+  '/newPodmena',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  classifierPodmena.newClassifierPodmena
+  podmena.newPodmena
 );
 router.post(
-  '/deleteClassifierPodmena',
+  '/deletePodmena',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  classifierPodmena.deleteClassifierPodmena
+  podmena.deletePodmena
 );
 router.post(
-  '/getClassifierPodmenaFromArchive',
+  '/getPodmenaFromArchive',
   roleMiddleware(['ADMIN', 'SUPERADMIN']),
-  classifierPodmena.getClassifierPodmenaFromArchive
+  podmena.getPodmenaFromArchive
 );
 router.delete(
-  '/fullDeleteClassifierPodmena',
+  '/fullDeletePodmena',
   roleMiddleware(['SUPERADMIN']),
-  classifierPodmena.fullDeleteClassifierPodmena
+  podmena.fullDeletePodmena
 );
 
 module.exports = router;

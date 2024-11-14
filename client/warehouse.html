@@ -816,7 +816,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nArZ2">Выберите классификатор*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ2" name="nArZ2.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nArZ2" name="nArZ2.textRuEng" required="true" type="text" class="inputOutlined dropdown nArZ2" value=""
               autocomplete="off" oninput="changeInputDropDown(this, 'listClassifier')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listClassifier')"
               onclick="changeInputClickDropDown(this, 'listClassifier', event.key)"
@@ -1432,9 +1432,7 @@
         window.location.replace("http://localhost:54386/client/login.html");
       }
       const user = parseJwt(tokenResult)
-      const admin = user.roles.find(({role}) => role.includes('ADMIN')) ?? false
-      const warehouse = user.roles.find(({role}) => role.includes('WAREHOUSE')) ?? false
-      if (admin || warehouse) return
+      if (user.roles.includes('ADMIN') || user.roles.includes('WAREHOUSE')) return
       window.location.replace("http://localhost:54386/client/index.html");
   }
 
@@ -1652,6 +1650,12 @@
         list.fullLoad = 0
         list.count = 0
       }
+      list.listClient.map(item => {item, item.data = item.name})
+      list.listClassifier.map(item => {item, item.data = item.classifier})
+      list.prepareListModel.map(item => {item, item.data = item.model})
+      list.prepareListZIP.map(item => {item, item.data = item.zip})
+      list.listWarehouses.map(item => {item, item.data = item.warehouse})
+      console.log('list = ', list)
     }
     if (func === 'getDataListForNewArrivalPodmena') {
       list[type] = data
@@ -1766,87 +1770,15 @@
     document.querySelector(container).style.display = "none";
   }
 
-  function newArrivalZIP() {
+  async function newArrivalZIP() {
     zeroingList()
     document.querySelector('.back').style.display = "block";
     list.fullLoad = 5
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewArrivalZIP',
-      data: ['Перекресток', 'Азбука вкуса', 'Лента', 'Мираторг'],
-      type: 'listClient'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewArrivalZIP',
-      data: ['Весы',
-        'ФР',
-        'ФН',
-        'ИБП',
-        'Кассовое оборудование',
-        'Прочее',
-        'Сетевое оборудование',
-        'Оргтехника',
-        'Прайсчекеры',
-        'Термопринтеры'
-      ],
-      type: 'listClassifier'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewArrivalZIP',
-      data: [
-        ['Digi', 'Весы'],
-        ['Атол-77Ф', 'ФР'],
-        ['Retail 01Ф', 'ФР'],
-        ['DataPrint', 'Весы'],
-        ['Noname', 'ИБП'],
-        ['Dosmar', 'Кассовое оборудование'],
-        ['A-data', 'Прочее'],
-        ['Noname', 'Прочее'],
-        ['Noname', 'ФН'],
-        ['СП-802', 'ФР'],
-        ['Netac', 'Прочее'],
-        ['AMD', 'Прочее'],
-        ['ChWay', 'Кассовое оборудование'],
-        ['ФН-1.2_Х5', 'ФН']
-      ],
-      type: 'prepareListModel'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewArrivalZIP',
-      data: [
-        ['Кабель от Raspberry к принтеру весов DP 403213', 'Весы', 'DP'],
-        ['Кабель питания принтера для весов DP 30503489', 'Весы', 'DP'],
-        ['Кассета для весов Dibal M525/D900', 'Весы', 'Dibal'],
-        ['Кассета для Dibal 500', 'Весы', 'Digi'],
-        ['Кассета для Digi SM100', 'Весы', 'Digi'],
-        ['Кассета для Digi SM5000bs', 'Весы', 'Digi'],
-        ['Аккумулятор для ИБП', 'ИБП', 'Noname'],
-        ['Кабель USB type A ext PWR 15', 'Прочее', 'Noname'],
-        ['Шлейф для подключения ФН', 'ФН', 'Noname']
-      ],
-      type: 'prepareListZIP'
-    })
-    onSuccess({
-      result: 'success',
-      func: 'getDataListForNewArrivalZIP',
-      data: ['офис СБИ', 'Клиент', 'Лапкин Е.В.', 'Четов П.А.'],
-      type: 'listWarehouses'
-    })
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getClients('getDataListForNewArrivalZIP','listClient')
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getСlassifier('getDataListForNewArrivalZIP','listClassifier')
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getModel('getDataListForNewArrivalZIP','prepareListModel')
-    // google.script.run
-    //   .withSuccessHandler(onSuccess)
-    //   .getModel('getDataListForNewArrivalZIP','listWarehouses')
+    await GetData('clients/getClients', 'getDataListForNewArrivalZIP', 'listClient')
+    await GetData('classifier/getClassifier', 'getDataListForNewArrivalZIP', 'listClassifier')
+    await GetData('models/getModels', 'getDataListForNewArrivalZIP', 'prepareListModel')
+    await GetData('zip/getZIP', 'getDataListForNewArrivalZIP', 'prepareListZIP')
+    await GetData('warehouse/getWarehouses', 'getDataListForNewArrivalZIP', 'listWarehouses')
   }
 
   function newArrivalPodmena() {
@@ -2307,15 +2239,12 @@
       if (popover.contains(e.target) && e.srcElement.tagName === 'LI') {
         const inputPopover = document.querySelector('.inputPopover')
         if (inputPopover.name.includes('nArZ2')) {
-          list['listModel'] = list.prepareListModel.filter(value => value[1] === e.target.innerText).map(value =>
-            value[0])
+          list['listModel'] = list.prepareListModel.filter(value =>  value.classifier._id === e.target.id)
           document.getElementById('nArZ3').value = ''
         }
         if (inputPopover.name.includes('nArZ3')) {
-          const classifier = document.getElementById('nArZ2').value
-          list['listZIP'] = list.prepareListZIP.filter(value => value[1] === classifier && value[2] === e.target
-            .innerText).map(value =>
-            value[0])
+          const classifierID = document.querySelector('.nArZ2').id
+          list['listZIP'] = list.prepareListZIP.filter(value => value.classifier._id === classifierID && value.model._id === e.target.id)
           document.getElementById('nArZ4').value = ''
         }
         if (inputPopover.name.includes('nArP2')) {
@@ -2816,8 +2745,8 @@
           index) => {
           const popoverLi = document.createElement("li");
           popoverLi.role = "popover_option"
-          popoverLi.id = `popover_option_${index}`
-          popoverLi.innerText = value
+          popoverLi.id = value._id
+          popoverLi.innerText = value.data
           if (input.classList.contains('textareaOutlined')){
             if (input.value.includes(value)){
               popoverLi.className = 'popoverKeySelected'
@@ -3321,7 +3250,64 @@
     const yyyy = today.getFullYear();
     return `${dd}.${mm}.${yyyy}` 
   }
-  
+
+  async function SendDataPost(sendData, urlData, data, container){
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token,
+        },
+        body: JSON.stringify(sendData),
+        
+      };
+    const resultFecth = await fetch(`http://localhost:5000/api/${urlData}`,params)
+    const result = await resultFecth.json()
+    if (typeof result === 'object' && result.result === 'error'){
+      onSuccess({
+        result: 'error',
+        func: container,
+        type: result.status === 'NotLogged' ?? false,
+        data: result.message
+      })
+      return
+    }
+    onSuccess({
+      result: 'success',
+      func: container,
+      data
+    })
+  }
+
+  async function GetData(urlData, func, type){
+    const token = localStorage.getItem('token')
+    const params = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          "Authorization": "Bearer " + token,
+        },
+      };
+    const resultFecth = await fetch(`http://localhost:5000/api/${urlData}`,params)
+    const result = await resultFecth.json()
+    if (typeof result === 'object' && result.result === 'error'){
+      onSuccess({
+        result: 'error',
+        func: container,
+        type: result.status === 'NotLogged' ?? false,
+        data: result.message
+      })
+      return
+    }
+    onSuccess({
+      result: 'success',
+      func,
+      type,
+      data: result
+    })
+  }
+
   const svgErr =
     "<svg class='modalSVGErr' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 455.111 455.111' style='enable-background:new 0 0 455.111 455.111;' xml:space='preserve'><circle style='fill:#E24C4B;' cx='227.556' cy='227.556' r='227.556'/><path style='fill:#D1403F;' d='M455.111,227.556c0,125.156-102.4,227.556-227.556,227.556c-72.533,0-136.533-32.711-177.778-85.333c38.4,31.289,88.178,49.778,142.222,49.778c125.156,0,227.556-102.4,227.556-227.556c0-54.044-18.489-103.822-49.778-142.222C422.4,91.022,455.111,155.022,455.111,227.556z'/><path style='fill:#FFFFFF;' d='M331.378,331.378c-8.533,8.533-22.756,8.533-31.289,0l-72.533-72.533l-72.533,72.533c-8.533,8.533-22.756,8.533-31.289,0c-8.533-8.533-8.533-22.756,0-31.289l72.533-72.533l-72.533-72.533c-8.533-8.533-8.533-22.756,0-31.289c8.533-8.533,22.756-8.533,31.289,0l72.533,72.533l72.533-72.533c8.533-8.533,22.756-8.533,31.289,0c8.533,8.533,8.533,22.756,0,31.289l-72.533,72.533l72.533,72.533C339.911,308.622,339.911,322.844,331.378,331.378z'/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>";
   const svgOk =

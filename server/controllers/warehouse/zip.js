@@ -1,4 +1,4 @@
-const ClassifierZIP = require('../../models/warehouse/classifierZIP');
+const ZIP = require('../../models/warehouse/zip');
 
 const includes = [
   {
@@ -13,11 +13,11 @@ const includes = [
   },
 ];
 
-class classifierZIPController {
-  async getClassifierZIP(_, res) {
+class zipController {
+  async getZIP(_, res) {
     try {
-      const classifierZIP = await ClassifierZIP.find().populate(includes);
-      return res.json(classifierZIP);
+      const zip = await ZIP.find().populate(includes);
+      return res.json(zip);
     } catch (e) {
       return res.status(400).json({
         result: 'error',
@@ -26,18 +26,18 @@ class classifierZIPController {
     }
   }
 
-  async newClassifierZIP(req, res) {
+  async newZIP(req, res) {
     try {
-      const { classifierZIP } = req.body;
-      const checkClassifierZIP = await ClassifierZIP.findOne({ classifierZIP });
-      if (checkClassifierZIP) {
+      const { zip } = req.body;
+      const checkZIP = await ZIP.findOne({ zip });
+      if (checkZIP) {
         return res.status(400).json({
           result: 'error',
           message: 'Классификатор ЗИП с таким названием уже существует!',
         });
       }
-      const newClassifierZIP = new ClassifierZIP(req.body);
-      const result = await newClassifierZIP.save();
+      const newZIP = new ZIP(req.body);
+      const result = await newZIP.save();
       return res.json({
         message: 'Классификатор ЗИП был успешно добавлен!',
         result,
@@ -50,13 +50,10 @@ class classifierZIPController {
     }
   }
 
-  async deleteClassifierZIP(req, res) {
+  async deleteZIP(req, res) {
     try {
       const { _id } = req.body;
-      const result = await ClassifierZIP.updateOne(
-        { _id: _id },
-        { status: 'NO_ACTIVE' }
-      );
+      const result = await ZIP.updateOne({ _id: _id }, { status: 'NO_ACTIVE' });
       return res.json({
         message: 'Классификатор ЗИП был перемещен в архив',
         result,
@@ -69,13 +66,10 @@ class classifierZIPController {
     }
   }
 
-  async getClassifierZIPFromArchive(req, res) {
+  async getZIPFromArchive(req, res) {
     try {
       const { _id } = req.body;
-      const result = await ClassifierZIP.updateOne(
-        { _id: _id },
-        { status: 'ACTIVE' }
-      );
+      const result = await ZIP.updateOne({ _id: _id }, { status: 'ACTIVE' });
       return res.json({
         message: 'Классификатор ЗИП перемещен из архив',
         result,
@@ -88,9 +82,9 @@ class classifierZIPController {
     }
   }
 
-  async fullDeleteClassifierZIP(req, res) {
+  async fullDeleteZIP(req, res) {
     try {
-      const result = await ClassifierZIP.findOneAndDelete(req.body);
+      const result = await ZIP.findOneAndDelete(req.body);
       return res.json({
         message: 'Классификатор ЗИП был успешно удален!',
         result,
@@ -104,4 +98,4 @@ class classifierZIPController {
   }
 }
 
-module.exports = new classifierZIPController();
+module.exports = new zipController();

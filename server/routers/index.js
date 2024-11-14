@@ -8,8 +8,9 @@ const regionsRouter = require('./clients/regions');
 const objectsRouter = require('./clients/objects');
 const classifierRouter = require('./warehouse/classifier');
 const modelsRouter = require('./warehouse/models');
-const classifierZIPRouter = require('./warehouse/classifierZIP');
-const classifierPodmenaRouter = require('./warehouse/classifierPodmena');
+const zipRouter = require('./warehouse/zip');
+const podmenaRouter = require('./warehouse/podmena');
+const warehouseRouter = require('./warehouse/warehouse');
 
 router.use('/users', usersRouter);
 router.use('/roles', rolesRouter);
@@ -19,7 +20,8 @@ router.use('/regions', regionsRouter);
 router.use('/objects', objectsRouter);
 router.use('/classifier', classifierRouter);
 router.use('/models', modelsRouter);
-router.use('/classifierZIP', classifierZIPRouter);
-router.use('/classifierPodmena', classifierPodmenaRouter);
+router.use('/zip', zipRouter);
+router.use('/podmena', podmenaRouter);
+router.use('/warehouse', warehouseRouter);
 
 module.exports = router;

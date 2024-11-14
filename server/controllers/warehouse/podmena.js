@@ -1,4 +1,4 @@
-const ClassifierPodmena = require('../../models/warehouse/classifierPodmena');
+const Podmena = require('../../models/warehouse/Podmena');
 
 const includes = [
   {
@@ -8,13 +8,11 @@ const includes = [
   },
 ];
 
-class classifierPodmenaController {
-  async getClassifierPodmena(_, res) {
+class podmenaController {
+  async getPodmena(_, res) {
     try {
-      const classifierPodmena = await ClassifierPodmena.find().populate(
-        includes
-      );
-      return res.json(classifierPodmena);
+      const podmena = await Podmena.find().populate(includes);
+      return res.json(podmena);
     } catch (e) {
       return res.status(400).json({
         result: 'error',
@@ -23,20 +21,20 @@ class classifierPodmenaController {
     }
   }
 
-  async newClassifierPodmena(req, res) {
+  async newPodmena(req, res) {
     try {
-      const { classifierPodmena } = req.body;
-      const checkClassifierPodmena = await ClassifierPodmena.findOne({
-        classifierPodmena,
+      const { podmena } = req.body;
+      const checkPodmena = await Podmena.findOne({
+        podmena,
       });
-      if (checkClassifierPodmena) {
+      if (checkPodmena) {
         return res.status(400).json({
           result: 'error',
           message: 'Классификатор подмены с таким названием уже существует!',
         });
       }
-      const newClassifierPodmena = new ClassifierPodmena(req.body);
-      const result = await newClassifierPodmena.save();
+      const newPodmena = new Podmena(req.body);
+      const result = await newPodmena.save();
       return res.json({
         message: 'Классификатор подмены был успешно добавлен!',
         result,
@@ -49,10 +47,10 @@ class classifierPodmenaController {
     }
   }
 
-  async deleteClassifierPodmena(req, res) {
+  async deletePodmena(req, res) {
     try {
       const { _id } = req.body;
-      const result = await ClassifierPodmena.updateOne(
+      const result = await Podmena.updateOne(
         { _id: _id },
         { status: 'NO_ACTIVE' }
       );
@@ -68,10 +66,10 @@ class classifierPodmenaController {
     }
   }
 
-  async getClassifierPodmenaFromArchive(req, res) {
+  async getPodmenaFromArchive(req, res) {
     try {
       const { _id } = req.body;
-      const result = await ClassifierPodmena.updateOne(
+      const result = await Podmena.updateOne(
         { _id: _id },
         { status: 'ACTIVE' }
       );
@@ -87,9 +85,9 @@ class classifierPodmenaController {
     }
   }
 
-  async fullDeleteClassifierPodmena(req, res) {
+  async fullDeletePodmena(req, res) {
     try {
-      const result = await ClassifierPodmena.findOneAndDelete(req.body);
+      const result = await Podmena.findOneAndDelete(req.body);
       return res.json({
         message: 'Классификатор подмены был успешно удален!',
         result,
@@ -103,4 +101,4 @@ class classifierPodmenaController {
   }
 }
 
-module.exports = new classifierPodmenaController();
+module.exports = new podmenaController();

@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose');
 
-const ClassifierPodmena = new Schema(
+const Podmena = new Schema(
   {
     classifier: { type: Schema.ObjectId, ref: 'classifier' },
-    classifierPodmena: {
+    podmena: {
       type: String,
       unique: true,
       required: true,
@@ -14,4 +14,4 @@ const ClassifierPodmena = new Schema(
   { timestamps: true }
 );
 
-module.exports = model('classifierPodmena', ClassifierPodmena);
+module.exports = model('podmena', Podmena);
