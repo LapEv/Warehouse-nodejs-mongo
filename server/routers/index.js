@@ -11,6 +11,7 @@ const modelsRouter = require('./warehouse/models');
 const zipRouter = require('./warehouse/zip');
 const podmenaRouter = require('./warehouse/podmena');
 const warehouseRouter = require('./warehouse/warehouse');
+const filesRouter = require('./fileUtils/fileUtils');
 
 router.use('/users', usersRouter);
 router.use('/roles', rolesRouter);
@@ -23,5 +24,6 @@ router.use('/models', modelsRouter);
 router.use('/zip', zipRouter);
 router.use('/podmena', podmenaRouter);
 router.use('/warehouse', warehouseRouter);
+router.use('/files', filesRouter);
 
 module.exports = router;

@@ -17,9 +17,10 @@ const dbURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process
 const start = async () => {
   try {
     await mongoose.connect(dbURL);
-    const server = app.listen(PORT, () =>
-      console.log(`Server started on PORT ${PORT}`)
-    );
+    bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: 'filesBucket',
+    });
+    app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
   } catch (e) {
     console.log(e);
   }
