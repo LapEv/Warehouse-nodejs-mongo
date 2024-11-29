@@ -805,7 +805,7 @@
         <div class="inputContainer first">
           <label class="inputLabel" for="nArZ1">Выберите поставщика*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ1" name="nArZ1.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nArZ1" name="nArZ1.textRuEng" required="true" type="text" class="inputOutlined dropdown" value="Перекресток"
               autocomplete="off" oninput="changeInputDropDown(this, 'listClient')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listClient')"
               onclick="changeInputClickDropDown(this, 'listClient', event.key)"
@@ -816,7 +816,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nArZ2">Выберите классификатор*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ2" name="nArZ2.textRuEng" required="true" type="text" class="inputOutlined dropdown nArZ2" value=""
+            <input id="nArZ2" name="nArZ2.textRuEng" required="true" type="text" class="inputOutlined dropdown nArZ2" value="Весовое оборудование"
               autocomplete="off" oninput="changeInputDropDown(this, 'listClassifier')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listClassifier')"
               onclick="changeInputClickDropDown(this, 'listClassifier', event.key)"
@@ -827,7 +827,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nArZ3">Выберите модель*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ3" name="nArZ3.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nArZ3" name="nArZ3.textRuEng" required="true" type="text" class="inputOutlined dropdown" value="Digi"
               autocomplete="off" oninput="changeInputDropDown(this, 'listModel')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listModel')"
               onclick="changeInputClickDropDown(this, 'listModel')" onchange="changeInputDropDownCross(this)">
@@ -837,7 +837,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nArZ4">Выберите ЗИП*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ4" name="nArZ4.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nArZ4" name="nArZ4.textRuEng" required="true" type="text" class="inputOutlined dropdown" value="Ведущий валик для SM100+ (длинный)"
               autocomplete="off" oninput="changeInputDropDown(this, 'listZIP')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listZIP')"
               onclick="changeInputClickDropDown(this, 'listZIP')" onchange="changeInputDropDownCross(this)">
@@ -847,7 +847,7 @@
         <div class="inputContainer">
           <label class="inputLabel" for="nArZ5">На какой склад*</label>
           <div class="inputOutlinedContainer">
-            <input id="nArZ5" name="nArZ5.textRuEng" required="true" type="text" class="inputOutlined dropdown" value=""
+            <input id="nArZ5" name="nArZ5.textRuEng" required="true" type="text" class="inputOutlined dropdown" value="Лапкин Е.В."
               autocomplete="off" oninput="changeInputDropDown(this, 'listWarehouses')"
               onkeydown="changeInputKeyDownDropDown(event.key, this, 'listWarehouses')"
               onclick="changeInputClickDropDown(this, 'listWarehouses')" onchange="changeInputDropDownCross(this)">
@@ -2807,13 +2807,16 @@
     const form = document.querySelector(`${container}`)
     form.querySelector('.inputsContainer').scrollTo(0, 0)
     if (container.includes('newArrivalZIPContainer')) {
-      const files = await getFiles('nArZ9')
+      const files1 = await getFiles('nArZ9')
+      const files2 = document.getElementById('nArZ9').files
+      console.log('files1 = ', files1)
+      console.log('files2 = ', files2)
+      SendDataFile(files2, 'files/uploadFile', 'uploadArrival', data, container)
       form.reset()
-      onSuccess({
-        result: 'success',
-        func: 'newArrivalZIP',
-        data
-      })
+      // const newData = {zip: data[0], classifier: dataID[1], model: dataID[2], status: 'ACTIVE'}
+
+      // SendDataPost(newData, 'users/newUser', data, container)
+
       //   google.script.run
       //     .withSuccessHandler(onSuccess)
       //     .writeNewPodmena(data, files)
@@ -2845,7 +2848,6 @@
       //     .writeNewPodmena(data, files)
       return
     }
-
     if (container.includes('newArrivalPodmenaContainer')) {
       const files = await getFiles('nArP7')
       form.reset()
@@ -3248,6 +3250,45 @@
     const mm = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1
     const yyyy = today.getFullYear();
     return `${dd}.${mm}.${yyyy}` 
+  }
+
+  async function SendDataFile(sendData, urlData, keyForUpload, data, container){
+    const token = localStorage.getItem('token')
+    console.log('sendData = ', sendData)
+    let formData = new FormData();
+    Array.from(sendData).map(file => {
+      formData.append(keyForUpload, file, file.name);
+      formData.append('uploadFilesName', file.name);
+    })
+    for (const entry of formData.entries())
+      {
+          console.log(entry);
+      }
+    const params = {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + token,
+        },
+        body: formData,
+      };
+    const resultFecth = await fetch(`http://localhost:5000/api/${urlData}`,params)
+    const result = await resultFecth.json()
+    console.log('resultFecth = ', resultFecth)
+    console.log('result = ', result)
+    if (typeof result === 'object' && result.result === 'error'){
+      onSuccess({
+        result: 'error',
+        func: container,
+        type: result.status === 'NotLogged' ?? false,
+        data: result.message
+      })
+      return
+    }
+    onSuccess({
+      result: 'success',
+      func: container,
+      data
+    })
   }
 
   async function SendDataPost(sendData, urlData, data, container){

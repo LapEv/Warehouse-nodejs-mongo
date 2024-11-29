@@ -1,30 +1,55 @@
-const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+const getToday = require('../utils/getToday');
 
-function upload() {
-  const mongodbUrl = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-  // const mongodbUrl = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_USER_PWD}@cluster0.vlhig1a.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
-  const storage = new GridFsStorage({
-    url: mongodbUrl,
-    dest: 'uploads/',
-    file: (req, file) => {
-      console.log('file = ', file);
-      return new Promise((resolve, _reject) => {
-        const fileInfo = {
-          filename: !/[^\u0000-\u00ff]/.test(file.originalname)
-            ? Buffer.from(file.originalname, 'latin1').toString('utf8')
-            : file.originalname,
-          bucketName: 'filesBucket',
-        };
-        console.log('fileInfo = ', fileInfo);
-        resolve(fileInfo);
+function uploadArrival(req, res) {
+  if (!req.files.uploadArrival)
+    return res.status(400).json({
+      result: 'error',
+      message: 'Нет файлов или не правильный ключ загрузки "uploadArrival"!',
+    });
+  if (!req.body.uploadFilesName)
+    return res.status(400).json({
+      result: 'error',
+      message:
+        'Нет имен файлов или не правильный ключ загрузки "uploadFilesName"!',
+    });
+  const files =
+    !Array.isArray(req.files.uploadArrival) || !req.files.uploadArrival.length
+      ? [req.files.uploadArrival]
+      : req.files.uploadArrival;
+  const fileNames =
+    !Array.isArray(req.body.uploadFilesName) || !req.body.uploadFilesName.length
+      ? [req.body.uploadFilesName]
+      : req.body.uploadFilesName;
+  if (files.length >= 10) 
+    return res.status(400).json({
+      result: 'error',
+      maessage: 'Максимально доупустимое число файлов 10!'
+    })
+  const today = getToday();
+  const dirPath = path.join(__dirname, `../Files/Acts/ArrivalZIP/${today}`);
+  let countFiles;
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+    countFiles = 1;
+  } else {
+    countFiles = fs.readdirSync(dirPath).length + 1;
+  }
+  const arrFilesPath = Array.from(files).map((file, index) => {
+    const filePath = path.join(
+      `${dirPath}/${countFiles + index}_${fileNames[index]}`
+    );
+    if (fs.existsSync(filePath)) {
+      return res.status(400).json({
+        result: 'error',
+        message: 'Путь или файл не существует!',
       });
-    },
+    }
+    file.mv(filePath);
+    return filePath;
   });
-
-  // console.log('storage = ', storage);
-  return multer({ storage });
+  return arrFilesPath;
 }
 
-module.exports = { upload };
+module.exports = { uploadArrival };
